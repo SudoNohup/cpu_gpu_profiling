@@ -1,8 +1,10 @@
-#static: *.a
-#gcc test_dgemm_openblas.c /home/jianyu/lib/blis/lib/libblis.a -o test_dgemm_blis.x -fopenmp -lm
-#gcc test_dgemm_openblas.c /home/jianyu/lib/openblas/lib/libopenblas.a -o test_dgemm_openblas.x -fopenmp
+export BLIS_DIR=/home/ubuntu/lib/blis
+export OPENBLAS_DIR=/home/ubuntu/lib/openblas
 
-#gcc -o test_dgemm_mkl.x -std=c99 -O2 -L/home/jianyu/lib/openblas/lib -I/home/jianyu/lib/openblas/include timer.c timer.h blas.h /home/jianyu/lib/openblas/lib/libopenblas.a test_dgemm_mkl.c fortran.h -lpthread -fopenmp
+#static: *.a
+gcc test_dgemm_openblas.c ${BLIS_DIR}/lib/libblis.a -o test_dgemm_blis.x -fopenmp -lm
+#gcc test_dgemm_openblas.c ${OPENBLAS_DIR}/lib/libopenblas.a -o test_dgemm_openblas.x -fopenmp
+
 #dynamic: *.so
-#gcc -o test_dgemm_openblas.x -std=c99 -O2 -L/home/jianyu/lib/openblas/lib -I/home/jianyu/lib/openblas/include timer.c timer.h blas.h test_dgemm_mkl.c -lpthread -fopenmp -lopenblas
-gcc -o test_dgemm_blis.x -std=c99 -O2 -L/home/jianyu/lib/blis/lib -I/home/jianyu/lib/blis/include timer.c timer.h blas.h test_dgemm_mkl.c -lpthread -fopenmp -lblis -lm
+#gcc -o test_dgemm_blis.x -std=c99 -O2 -L${BLIS_DIR}/lib -I${BLIS_DIR}/include timer.c timer.h blas.h test_dgemm_mkl.c -lpthread -fopenmp -lblis -lm
+#gcc -o test_dgemm_openblas.x -std=c99 -O2 -L${OPENBLAS_DIR}/lib -I${OPENBLAS_DIR}/include timer.c timer.h blas.h test_dgemm_mkl.c -lpthread -fopenmp -lopenblas
