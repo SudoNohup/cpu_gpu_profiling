@@ -1,4 +1,4 @@
-//timming dgemm gcc -o time_dgemm time_dgemm.c /your/path/libopenblas.a ./time_dgemm <m> <n> <k> e.g. ./time_dgemm 1000 1000 1000
+//timming sgemm gcc -o time_sgemm time_sgemm.c /your/path/libopenblas.a ./time_sgemm <m> <n> <k> e.g. ./time_sgemm 1000 1000 1000
 
 
 #include "stdio.h"
@@ -6,7 +6,7 @@
 #include "sys/time.h"
 #include "time.h"
 
-extern void dgemm_(char*, char*, int*, int*,int*, double*, double*, int*, double*, int*, double*, double*, int*);
+extern void sgemm_(char*, char*, int*, int*,int*, float*, float*, int*, float*, int*, float*, float*, int*);
 
 int main(int argc, char* argv[])
 {
@@ -38,16 +38,16 @@ int main(int argc, char* argv[])
   int sizeofc = m * n;
   char ta = 'N';
   char tb = 'N';
-  double alpha = 1.2;
-  //double beta = 0.001;
-  double beta = 0.0;
+  float alpha = 1.2;
+  //float beta = 0.001;
+  float beta = 0.0;
 
   struct timeval start,finish;
-  double duration;
+  float duration;
 
-  double* A = (double*)malloc(sizeof(double) * sizeofa);
-  double* B = (double*)malloc(sizeof(double) * sizeofb);
-  double* C = (double*)malloc(sizeof(double) * sizeofc);
+  float* A = (float*)malloc(sizeof(float) * sizeofa);
+  float* B = (float*)malloc(sizeof(float) * sizeofb);
+  float* C = (float*)malloc(sizeof(float) * sizeofc);
 
   srand((unsigned)time(NULL));
 
@@ -62,11 +62,11 @@ int main(int argc, char* argv[])
   //#if 0
   printf("m=%d,n=%d,k=%d,alpha=%lf,beta=%lf,sizeofc=%d\n",m,n,k,alpha,beta,sizeofc);
   gettimeofday(&start, NULL);
-  dgemm_(&ta, &tb, &m, &n, &k, &alpha, A, &m, B, &k, &beta, C, &m);
+  sgemm_(&ta, &tb, &m, &n, &k, &alpha, A, &m, B, &k, &beta, C, &m);
   gettimeofday(&finish, NULL);
 
-  duration = ((double)(finish.tv_sec-start.tv_sec)*1000000 + (double)(finish.tv_usec-start.tv_usec)) / 1000000;
-  double gflops = 2.0 * m *n*k;
+  duration = ((float)(finish.tv_sec-start.tv_sec)*1000000 + (float)(finish.tv_usec-start.tv_usec)) / 1000000;
+  float gflops = 2.0 * m *n*k;
   gflops = gflops/duration*1.0e-9;
 
 
