@@ -1,9 +1,11 @@
 OPTS      = -std=c99 -O3 
 
 MKL_SERIAL= -lmkl_sequential -lmkl_core -lmkl_intel_lp64
-LIB       = ${MKL_SERIAL} -lgfortran -lpthread
+MKL_PARALLEL= -lmkl_intel_thread -lmkl_core -lmkl_intel_lp64
+#LIB       = ${MKL_SERIAL} -lgfortran -lpthread
+LIB       = ${MKL_PARALLEL} -lgfortran -lpthread -openmp
 
-LIBDIR   += -L/opt/intel/composer_xe_2013_sp1/mkl/lib/intel64 -I/opt/intel/composer_xe_2013_sp1/mkl/include
+LIBDIR   += -L${MKLROOT}/lib/intel64 -I${MKLROOT}/include
 
 
 all: test_dgemm_mkl.x test_dsyrk_mkl.x test_dtrsm_mkl.x test_dpotrf_mkl.x
