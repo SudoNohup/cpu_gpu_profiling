@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
   double mkl_time;
 
   int ii;
-  int nreps = 20;
+  int nreps = 3;
 
 
 
@@ -99,8 +99,8 @@ int main(int argc, char **argv) {
 	  C, m); 
   mkl_time = endTimer(&time);
   //printf("mkl_time: %g (%g GFLOPS)\n", mkl_time, (2.0*m*n*k* 1e-6) / mkl_time);
-  //printf("%f\t", (2.0*m*n*k* 1e-6) / mkl_time);
-  printf("%f\t", mkl_time);
+  printf("%f\t", (2.0*m*n*k* 1e-6) / mkl_time);
+//  printf("%f\t", mkl_time);
 
 
   float average_time, fastest_time = 10000000, slowest_time = 0, sum = 0.0;
@@ -120,12 +120,12 @@ int main(int argc, char **argv) {
 	slowest_time = (slowest_time > mkl_time) ? slowest_time : mkl_time;
   }
   average_time = sum/nreps;
-//  printf("%f\t", (2.0*m*n*k* 1e-6)/ fastest_time);
-//  printf("%f\t", (2.0*m*n*k* 1e-6)/ slowest_time);
-//  printf("%f\t", (2.0*m*n*k* 1e-6)/ average_time);
-  printf("%f\t", fastest_time);
-  printf("%f\t", slowest_time);
-  printf("%f\t", average_time);
+  printf("%f\t", (2.0*m*n*k* 1e-6)/ fastest_time);
+  printf("%f\t", (2.0*m*n*k* 1e-6)/ slowest_time);
+  printf("%f\t", (2.0*m*n*k* 1e-6)/ average_time);
+//  printf("%f\t", fastest_time);
+//  printf("%f\t", slowest_time);
+//  printf("%f\t", average_time);
 
 
 
