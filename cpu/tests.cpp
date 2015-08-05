@@ -65,17 +65,22 @@ double time_diff(timespec start, timespec end)
 
 int main () {
   int bytes_per_cycle = 0;
-  double frequency = 2.3;  //Haswell
-  //double frequency = 3.6;  //IB
+  int flops_per_cycle = 0;
+  //double frequency = 2.3;  //Haswell
+  double frequency = 3.4;  //IB
   //double frequency = 2.66;  //Core2
 #if (defined(__FMA__))
   bytes_per_cycle = 96;
+  flops_per_cycle = 32;
 #elif (defined(__AVX__))
   bytes_per_cycle = 48;
+  flops_per_cycle = 16;
     #else
   bytes_per_cycle = 24;
+  flops_per_cycle = 8;
     #endif
-  double peak = frequency*bytes_per_cycle;
+  double peak  = frequency*bytes_per_cycle;
+  double peakf = frequency*flops_per_cycle;
 
   //const int n =2048;
   //const int n =400;
@@ -108,7 +113,7 @@ int main () {
     #endif
 
   while(1) {
-    double dtime, rate;
+    double dtime, rate, ratef;
 
     clock_gettime(TIMER_TYPE, &time1);
 #if (defined(__FMA__))
@@ -121,7 +126,10 @@ int main () {
     clock_gettime(TIMER_TYPE, &time2);
     dtime = time_diff(time1,time2);
     rate = 3.0*1E-9*sizeof(float)*n*repeat/dtime;
+	ratef = 2.0*1E-9*n*repeat/dtime;
+
     printf("unroll1     rate %6.2f GB/s, efficency %6.2f%%, error %d\n", rate, 100*rate/peak, memcmp(z,z2, sizeof(float)*n));
+    printf("unroll1     rate %6.2f GFLOPS, efficency %6.2f%%, error %d\n", ratef, 100*ratef/peakf, memcmp(z,z2, sizeof(float)*n));
     clock_gettime(TIMER_TYPE, &time1);
 #if (defined(__FMA__))
     triad_fma_repeat(x,y,z,n,repeat);
@@ -133,7 +141,9 @@ int main () {
     clock_gettime(TIMER_TYPE, &time2);
     dtime = time_diff(time1,time2);
     rate = 3.0*1E-9*sizeof(float)*n*repeat/dtime;
+	ratef = 2.0*1E-9*n*repeat/dtime;
     printf("intrinsic   rate %6.2f GB/s, efficency %6.2f%%, error %d\n", rate, 100*rate/peak, memcmp(z,z2, sizeof(float)*n));
+    printf("intrinsic   rate %6.2f GFLOPS, efficency %6.2f%%, error %d\n", ratef, 100*ratef/peakf, memcmp(z,z2, sizeof(float)*n));
     clock_gettime(TIMER_TYPE, &time1);
 #if (defined(__FMA__))
     triad_fma_asm_repeat_unroll16(x,y,z,n,repeat);
@@ -145,6 +155,8 @@ int main () {
     clock_gettime(TIMER_TYPE, &time2);
     dtime = time_diff(time1,time2);
     rate = 3.0*1E-9*sizeof(float)*n*repeat/dtime;
+	ratef = 2.0*1E-9*n*repeat/dtime;
     printf("unroll16    rate %6.2f GB/s, efficency %6.2f%%, error %d\n", rate, 100*rate/peak, memcmp(z,z2, sizeof(float)*n));
+    printf("unroll16    rate %6.2f GFLOPS, efficency %6.2f%%, error %d\n", ratef, 100*ratef/peakf, memcmp(z,z2, sizeof(float)*n));
   }
 }
