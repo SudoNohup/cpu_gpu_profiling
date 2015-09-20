@@ -149,8 +149,8 @@ int main(int argc, char **argv) {
   cudaEvent_t execStart[nreps+1], execStop[nreps+1];
   checkCuda( cudaEventCreate(&start) );
   checkCuda( cudaEventCreate(&stop) );
-  checkCuda( cudaEventCreate(&stop1) );
-  checkCuda( cudaEventCreate(&stop2) );
+  //checkCuda( cudaEventCreate(&stop1) );
+  //checkCuda( cudaEventCreate(&stop2) );
   checkCuda( cudaEventCreate(&stop3) );
 
 
@@ -174,32 +174,35 @@ int main(int argc, char **argv) {
 
   cudaEventRecord(start,0);
   checkCuda(cudaMemcpy(d_A, A, m*k*sizeof(*A), cudaMemcpyHostToDevice));
-  cudaEventRecord(stop1,0);
+  //cudaEventRecord(stop1,0);
   checkCuda(cudaMemcpy(d_B, B, k*n*sizeof(*B), cudaMemcpyHostToDevice));
-  cudaEventRecord(stop2,0);
+  //cudaEventRecord(stop2,0);
   checkCuda(cudaMemcpy(d_C, C, m*n*sizeof(*C), cudaMemcpyHostToDevice));
   cudaEventRecord(stop3,0);
   //checkCublas(cublasSetMatrix(m, k, sizeof(*A), A, m, d_A, m));//A -> d_A
   //checkCublas(cublasSetMatrix(k, n, sizeof(*B), B, k, d_B, k));//B -> d_B
   //checkCublas(cublasSetMatrix(m, n, sizeof(*C), C, m, d_C, m));//C -> d_C
   //cudaEventRecord(stop,0);
-  cudaEventSynchronize(stop1);
-  cudaEventSynchronize(stop2);
+  //cudaEventSynchronize(stop1);
+  //cudaEventSynchronize(stop2);
   cudaEventSynchronize(stop3);
 
   float memcpy_h2d_time1, memcpy_h2d_time2, memcpy_h2d_time3;
-  cudaEventElapsedTime(&memcpy_h2d_time1, start, stop1);
-  cudaEventElapsedTime(&memcpy_h2d_time2, start, stop2);
+  //cudaEventElapsedTime(&memcpy_h2d_time1, start, stop1);
+  //cudaEventElapsedTime(&memcpy_h2d_time2, start, stop2);
   cudaEventElapsedTime(&memcpy_h2d_time3, start, stop3);
   //printf("Memcpy_h2d_time: %f\n", memcpy_h2d_time);
   //printf(" Memcpy host to device\t: %f ms (%f GB/s)\n", memcpy_h2d_time, (8*(m*k + k*n + m*n) * 1e-6)/ memcpy_h2d_time);
   //printf("%f\t", (8*(m*k + k*n + m*n) * 1e-6)/ memcpy_h2d_time);
-  printf("%f\t", memcpy_h2d_time3);
-  printf("%f\t", memcpy_h2d_time2);
-  printf("%f\t", memcpy_h2d_time1);
+  //printf("%f\t", memcpy_h2d_time3);
+  //printf("%f\t", memcpy_h2d_time2);
+  //printf("%f\t", memcpy_h2d_time1);
+
+  printf("Memcpy host to device\t: %f ms (%f GB/s)\n", memcpy_h2d_time3, (8*(m*k + k*n + m*n) * 1e-6)/ memcpy_h2d_time3);
+  //printf"%f\t", (float)8.0 * (m*k + k*n + m*n) * 1e-6 / mem_h2d_time3
 
 
-  printf("0\t");
+  //printf("0\t");
 
   DATATYPE alpha = 1.0;
   DATATYPE beta = 1.0;
@@ -217,35 +220,40 @@ int main(int argc, char **argv) {
   cudaEventElapsedTime(&cublas_time, start, stop);
   //printf("cublas_time: %f\n", cublas_time);
   //printf(" Cublas\t: %f ms (%f GFLOPS)\n", cublas_time, (2.0*m*n*k* 1e-6)/ cublas_time);
-  //printf("%f\t", (2.0*m*n*k* 1e-6)/ cublas_time);
-  printf("%f\t", cublas_time);
+  printf("first-run GFLOPS:%f\n", (2.0*m*n*k* 1e-6)/ cublas_time);
+  //printf("%f\t", cublas_time);
 
 
   float average_time, fastest_time = 10000000, slowest_time = 0, sum = 0.0;
   cudaEventRecord(start,0);
   for (ii = 0; ii < nreps; ++ii) {
-	cudaEventRecord(start,0);
+	//cudaEventRecord(start,0);
 	checkCublas(CUBLAS_FUNC(handle, CUBLAS_OP_N, CUBLAS_OP_N, m, n, k, &alpha, d_A, m, d_B, k, &beta, d_C, m));
-	cudaEventRecord(stop,0);
-	cudaEventSynchronize(stop);
-	cudaEventElapsedTime(&cublas_time, start, stop);
+	//cudaEventRecord(stop,0);
+	//cudaEventSynchronize(stop);
+	//cudaEventElapsedTime(&cublas_time, start, stop);
 	//printf("cublas_time: %f\n", cublas_time);
 	//printf(" Cublas\t: %f ms (%f GFLOPS)\n", cublas_time, (2.0*m*n*k* 1e-6)/ cublas_time);
 	//printf("%f\t", (2.0*m*n*k* 1e-6)/ cublas_time);
 	
-	sum += cublas_time;
-	fastest_time = (fastest_time < cublas_time) ? fastest_time : cublas_time;
-	slowest_time = (slowest_time > cublas_time) ? slowest_time : cublas_time;
+	//sum += cublas_time;
+	//fastest_time = (fastest_time < cublas_time) ? fastest_time : cublas_time;
+	//slowest_time = (slowest_time > cublas_time) ? slowest_time : cublas_time;
   }
+  cudaEventRecord(stop,0);
+  cudaEventSynchronize(stop);
+  cudaEventElapsedTime(&cublas_time, start, stop);
+
+  sum = cublas_time;
 
   average_time = sum/nreps;
   //printf("%f\t", (2.0*m*n*k* 1e-6)/ fastest_time);
   //printf("%f\t", (2.0*m*n*k* 1e-6)/ slowest_time);
-  //printf("%f\t", (2.0*m*n*k* 1e-6)/ average_time);
+  printf("hot GFLOPS:%f\n", (2.0*m*n*k* 1e-6)/ average_time);
 
-  printf("%f\t", fastest_time);
-  printf("%f\t", slowest_time);
-  printf("%f\t", average_time);
+  //printf("%f\t", fastest_time);
+  //printf("%f\t", slowest_time);
+  //printf("%f\t", average_time);
 
 
   cudaEventRecord(start,0);
@@ -259,6 +267,8 @@ int main(int argc, char **argv) {
   //printf(" Memcpy device to host\t: %f ms (%f GB/s)\n", memcpy_d2h_time, (8*(m*n) * 1e-6)/ memcpy_d2h_time);
   //printf("%f\n", (8*(m*n) * 1e-6)/ memcpy_d2h_time);
 
+
+  printf("Memcpy device to host\t: %f ms (%f GB/s)\n", memcpy_d2h_time, (8.0*(m*n) * 1e-6)/ memcpy_d2h_time);
 
   //printf("%f\t", (2.0*m*n*k* 1e-6)/ average_time);
 
