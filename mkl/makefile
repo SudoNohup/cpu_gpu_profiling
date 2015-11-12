@@ -8,42 +8,23 @@ LIB       = ${MKL_PARALLEL} -lpthread -openmp
 
 LIBDIR   += -L${MKLROOT}/lib/intel64 -I${MKLROOT}/include
 
-
-all: test_dgemm_mkl.x test_dsyrk_mkl.x test_dtrsm_mkl.x test_dpotrf_mkl.x test_daxpy_mkl.x
+all: test_dgemm_mkl.x test_dsyrk_mkl.x test_dtrsm_mkl.x test_dpotrf_mkl.x test_daxpy_mkl.x test_saxpy_mkl.x
 
 BASEHD = timer.h blas.h
 BASESRC = timer.c
 
 BASEOBJ = $(BASESRC:.c=.o) $(BASEHD:.c=.o)
 
-
-test_daxpy_mkl.x: $(BASEOBJ) test_daxpy_mkl.o
-	$(CC) $(OPTS) $(LIBDIR) $(BASEOBJ) test_daxpy_mkl.o -o test_daxpy_mkl.x $(LIB)
-
-test_dgemm_mkl.x: $(BASEOBJ) test_dgemm_mkl.o
-	$(CC) $(OPTS) $(LIBDIR) $(BASEOBJ) test_dgemm_mkl.o -o test_dgemm_mkl.x $(LIB)
-
-#test_sgemm_mkl.x: $(BASEOBJ) test_sgemm_mkl.o
-#	$(CC) $(OPTS) $(LIBDIR) $(BASEOBJ) test_sgemm_mkl.o -o test_sgemm_mkl.x $(LIB)
-
-test_dsyrk_mkl.x: $(BASEOBJ) test_dsyrk_mkl.o
-	$(CC) $(OPTS) $(LIBDIR) $(BASEOBJ) test_dsyrk_mkl.o -o test_dsyrk_mkl.x $(LIB)
-
-test_dtrsm_mkl.x: $(BASEOBJ) test_dtrsm_mkl.o
-	$(CC) $(OPTS) $(LIBDIR) $(BASEOBJ) test_dtrsm_mkl.o -o test_dtrsm_mkl.x $(LIB)
-
-test_dpotrf_mkl.x: $(BASEOBJ) test_dpotrf_mkl.o
-	$(CC) $(OPTS) $(LIBDIR) $(BASEOBJ) test_dpotrf_mkl.o -o test_dpotrf_mkl.x $(LIB)
+%.x: %.o $(BASEOBJ)
+	$(CC) $(OPTS) $(LIBDIR) $(BASEOBJ) $< -o $@ $(LIB)
 
 #.SUFFIXES: .c .cpp .cu .o
 
 %.o : %.c
-	echo $(BASEOBJ)
 	$(CC) $(OPTS) $(INC) -c $<
 
 clean:
 	rm -f *.x *~ *.o 
 
-
-.PHONY: clean
+#.PHONY: clean
 
