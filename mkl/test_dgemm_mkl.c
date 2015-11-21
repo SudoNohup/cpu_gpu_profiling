@@ -21,7 +21,9 @@ int main(int argc, char **argv) {
 
 
   char transa = 'n';
+  //char transa = 't';
   char transb = 'n';
+  //char transb = 't';
 
   if (argc <=1 ) {
 	printf("exactly 1 arguments\n");
@@ -99,7 +101,7 @@ int main(int argc, char **argv) {
 	  C, m); 
   mkl_time = endTimer(&time);
   //printf("mkl_time: %g (%g GFLOPS)\n", mkl_time, (2.0*m*n*k* 1e-6) / mkl_time);
-  printf("%f\t", (2.0*m*n*k* 1e-6) / mkl_time);
+  printf("warm: %f\t", (2.0*m*n*k* 1e-6) / mkl_time);
 //  printf("%f\t", mkl_time);
 
 
@@ -120,9 +122,9 @@ int main(int argc, char **argv) {
 	slowest_time = (slowest_time > mkl_time) ? slowest_time : mkl_time;
   }
   average_time = sum/nreps;
-  printf("%f\t", (2.0*m*n*k* 1e-6)/ fastest_time);
-  printf("%f\t", (2.0*m*n*k* 1e-6)/ slowest_time);
-  printf("%f\t", (2.0*m*n*k* 1e-6)/ average_time);
+  printf("fastest:%f\t", (2.0*m*n*k* 1e-6)/ fastest_time);
+  printf("slowest:%f\t", (2.0*m*n*k* 1e-6)/ slowest_time);
+  printf("average:%f\t", (2.0*m*n*k* 1e-6)/ average_time);
 //  printf("%f\t", fastest_time);
 //  printf("%f\t", slowest_time);
 //  printf("%f\t", average_time);
