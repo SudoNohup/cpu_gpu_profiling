@@ -49,11 +49,13 @@ void test_dblisgemm(
   int    ldc;
   double ref_rectime, dblisgemm_rectime;
 
-  nx    = NUM_POINTS;
+  //nx    = NUM_POINTS;
 
   amap  = (int*)malloc( sizeof(int) * m );
   bmap  = (int*)malloc( sizeof(int) * n );
-  XA    = (double*)malloc( sizeof(double) * k * nx );
+
+  XA    = (double*)malloc( sizeof(double) * k * m );
+  XB    = (double*)malloc( sizeof(double) * k * n );
 
 
   ldc = ( ( m - 1 ) / DGEMM_MR + 1 ) * DGEMM_MR;
@@ -73,17 +75,20 @@ void test_dblisgemm(
   }
 
   // Randonly generate points in [ 0, 1 ].
-  for ( i = 0; i < nx; i ++ ) {
+  for ( i = 0; i < m; i ++ ) {
     for ( p = 0; p < k; p ++ ) {
       XA[ i * k + p ] = (double)( rand() % 1000000 ) / 1000000.0;	
+    }
+  }
+  for ( i = 0; i < n; i ++ ) {
+    for ( p = 0; p < k; p ++ ) {
+      XB[ i * k + p ] = (double)( rand() % 1000000 ) / 1000000.0;	
     }
   }
 
 
   // Use the same coordinate table
-  XB  = XA;
-
-
+  //XB  = XA;
 
 
   for ( i = 0; i < nrepeats; i ++ ) {

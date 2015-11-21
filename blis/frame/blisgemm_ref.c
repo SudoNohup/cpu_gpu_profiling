@@ -77,8 +77,10 @@ void dblisgemm_ref(
 
 
   // Allocate buffers.
-  As = (double*)malloc( sizeof(double) * m * k );
-  Bs = (double*)malloc( sizeof(double) * n * k );
+//  As = (double*)malloc( sizeof(double) * m * k );
+//  Bs = (double*)malloc( sizeof(double) * n * k );
+  As = XA;
+  Bs = XB;
   Cs = XC;
 
   #include "dblisgemm_ref_impl.h"
@@ -89,7 +91,7 @@ void dblisgemm_ref(
   }
 
   // Free  buffers
-  free( As );
-  free( Bs );
+//  free( As );
+//  free( Bs );
 
 }
