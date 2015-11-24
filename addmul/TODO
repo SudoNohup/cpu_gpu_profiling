@@ -1,0 +1,41 @@
+TODO:
+
+Final Check lists:
+TODO
+/frame
+/test
+/include
+makefile
+make.inc
+make.intel.inc
+make.gnu.inc
+
+BUGS:
+
+
+//performance BUGS for MKL dgemm routine...
+//1. why A= 2A result is right here? double check compute_error routine...
+2. find the 2012 Strassen GOTOBLAS paper... (In the flash disk??)
+//3. finish A*(B+E) routine and compare the performance...
+
+
+G = B + E;
+A * G
+
+unpack C?
+
+corner case handling? <8, <4???
+
+why 5th loop -> pack B
+why 4th loop -> pack A
+
+
+GFLOPS? average after the first run?
+
+
+
+A*B (m*k   x   k*n  -> how to pack B for m*k case)?
+unpack C?
+
+multi-core?
+
