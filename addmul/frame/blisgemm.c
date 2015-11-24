@@ -107,22 +107,22 @@ inline void packB_kcxnc_d(
   }
 
 
-//  for ( j = 0; j < n; j ++ ) {
-//    e_pntr[ j ] = XE + ldXE * bmap[ j ];
-//  }
-//
-//  for ( j = n; j < DGEMM_NR; j ++ ) {
-//    e_pntr[ j ] = XE + ldXE * bmap[ 0 ];
-//  }
-//
-//  //Scan twice faster (more floating point operation, more locality) or scan once (less FLOPS, but less locality)?
-//  for ( p = 0; p < k; p ++ ) {
-//    for ( j = 0; j < DGEMM_NR; j ++ ) {
-//      *packE  += *e_pntr[ j ];
-//      packE ++;
-//      e_pntr[ j ] ++;
-//    }
-//  }
+  for ( j = 0; j < n; j ++ ) {
+    e_pntr[ j ] = XE + ldXE * bmap[ j ];
+  }
+
+  for ( j = n; j < DGEMM_NR; j ++ ) {
+    e_pntr[ j ] = XE + ldXE * bmap[ 0 ];
+  }
+
+  //Scan twice faster (more floating point operation, more locality) or scan once (less FLOPS, but less locality)?
+  for ( p = 0; p < k; p ++ ) {
+    for ( j = 0; j < DGEMM_NR; j ++ ) {
+      *packE  += *e_pntr[ j ];
+      packE ++;
+      e_pntr[ j ] ++;
+    }
+  }
 
 }
 /*

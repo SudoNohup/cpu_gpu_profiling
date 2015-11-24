@@ -61,14 +61,14 @@
 //#ifdef USE_BLAS
 
 
-//  int    len2   = k * n;
-//  double alpha2 = 1.0;
-//  int    incx   = 1;
-//  int    incy   = 1;
-//
-//
-//  dcopy( &len2, Bs, &incx, Gs, &incy );
-//  daxpy( &len2, &alpha2, Es, &incx, Gs, &incy );
+  int    len2   = k * n;
+  double alpha2 = 1.0;
+  int    incx   = 1;
+  int    incy   = 1;
+
+
+  dcopy( &len2, Bs, &incx, Gs, &incy );
+  daxpy( &len2, &alpha2, Es, &incx, Gs, &incy );
   
 
 
@@ -82,8 +82,8 @@
 
 
   dgemm( "T", "N", &m, &n, &k, &fneg2,
-        As, &k, Bs, &k, &fzero, Cs, &m );
-        //As, &k, Gs, &k, &fzero, Cs, &m );
+        //As, &k, Bs, &k, &fzero, Cs, &m );
+        As, &k, Gs, &k, &fzero, Cs, &m );
 
 //#else
 //  #pragma omp parallel for private( i, p )

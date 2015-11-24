@@ -95,11 +95,11 @@ void test_dblisgemm(
     }
   }
 
-  for ( i = 0; i < m; i ++ ) {
-    for ( j = 0; j < n; j ++ ) {
-      XC[ j * ldc  + i ] = 0.0;	
-    }
-  }
+//  for ( i = 0; i < m; i ++ ) {
+//    for ( j = 0; j < n; j ++ ) {
+//      XC[ j * ldc  + i ] = 0.0;	
+//    }
+//  }
   for ( i = 0; i < m; i ++ ) {
     for ( j = 0; j < n; j ++ ) {
       XC_ref[ j * m + i ] = 0.0;	
