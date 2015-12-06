@@ -2,7 +2,7 @@ NVCC      = nvcc
 CUBLASLIB = -lcublas
 
 
-all: test_dgemm_cublas.x test_sgemm_cublas.x test_dsyrk_cublas.x test_dtrsm_cublas.x test_daxpy_cublas.x test_saxpy_cublas.x
+all: test_dgemm_cublas.x test_sgemm_cublas.x test_dsyrk_cublas.x test_dtrsm_cublas.x test_daxpy_cublas.x test_saxpy_cublas.x test_sgemm_magma.x test_sgemm_magma2.x
 
 #test_dgemm_cublas.x: test_dgemm_cublas.cu 
 #	nvcc test_dgemm_cublas.cu -o test_dgemm_cublas.x -lcublas
