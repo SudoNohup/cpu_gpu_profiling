@@ -6,7 +6,7 @@
 #include "blas.h"
 
 #define IDX2C(i, j, ld) (((j)*(ld)) + (i))
-#define DATATYPE double
+#define DATATYPE float
 //#define CUBLAS_FUNC mklDgemm 
 //#define SIZE 1000
 
@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
   //warm up
   beginTimer(&time);
 
-  daxpy (k, alpha, x, incx, y, incy);
+  saxpy (k, alpha, x, incx, y, incy);
 
   mkl_time = endTimer(&time);
   //printf("mkl_time: %g (%g GFLOPS)\n", mkl_time, (2.0*m*n*k* 1e-6) / mkl_time);
@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
   float average_time, fastest_time = 1000000, slowest_time = 0, sum = 0.0;
   beginTimer(&time);
   for (ii = 0; ii < nreps; ++ii) {
-	daxpy (k, alpha, x, incx, y, incy);
+	saxpy (k, alpha, x, incx, y, incy);
 	//printf("mkl_time: %g (%g GFLOPS)\n", mkl_time, (2.0*m*n*k* 1e-6) / mkl_time);
 	//sum += mkl_time;
 	//fastest_time = (fastest_time < mkl_time) ? fastest_time : mkl_time;
@@ -106,8 +106,6 @@ int main(int argc, char **argv) {
   //  printf("%f\t", fastest_time);
   //  printf("%f\t", slowest_time);
   //  printf("%f\t", average_time);
-
-
 
   printf("\n");
 

@@ -1,6 +1,4 @@
-#include <sys/time.h>
-#include <stdio.h>
-
+#include "timer.h"
 void beginTimer(struct timeval* time)
 {
 	gettimeofday(time, NULL); 
